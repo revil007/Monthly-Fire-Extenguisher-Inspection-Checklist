@@ -1,141 +1,181 @@
-
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SCI Jetty Fire Inspection</title>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Monthly Fire Hazard and Prevention Checklist</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#eef1f4;font-family:Arial;color:#111}
-.page{max-width:1250px;margin:18px auto;background:#fff;padding:25px 30px 35px}
-.header{text-align:center;border-bottom:2px solid #111;padding-bottom:12px}.header b{font-size:14px}.header h1{font-size:19px;margin:7px 0}
+.page{max-width:1250px;margin:20px auto;background:white;padding:28px 32px 35px}
+.header{text-align:center;border-bottom:2px solid #111;padding-bottom:12px}
+.header b{font-size:14px}.header h1{font-size:19px;margin:7px 0 0}
 .top{display:grid;grid-template-columns:1fr 300px;gap:25px;margin:18px 0;font-size:14px}
-.top input{width:100%;border:0;border-bottom:1px solid #111;padding:6px}
-section{margin-top:20px}h2{font-size:15px;margin:0 0 7px}.tablewrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px;min-width:950px}
-th,td{border:1px solid #222;padding:5px;text-align:center;vertical-align:middle}th{font-weight:bold;line-height:1.15;background:#fafafa}
-td.equip{font-weight:bold}td input,td select{width:100%;padding:6px;border:1px solid #bbb;border-radius:3px;font-size:11px;background:#fff}
-.foot{font-size:12px;font-weight:bold;margin:17px 0 28px}.sign{display:grid;grid-template-columns:repeat(3,1fr);gap:35px;text-align:center;font-size:12px}
-.line{height:30px;border-bottom:1px solid #111}#inspectedBy{border:0;border-bottom:1px solid #111;width:80%;text-align:center}
-.summary{margin-top:20px;padding:15px;border:1px solid #bbb;border-radius:8px}.summarygrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.summarybox{border:1px solid #ddd;padding:10px;text-align:center}.summarybox b{display:block;font-size:18px}
-.actions{position:sticky;bottom:0;background:rgba(238,241,244,.97);padding:12px;text-align:center;margin-top:20px}
-button{padding:12px 24px;border-radius:7px;border:1px solid #999;font-weight:bold;cursor:pointer}.submit{background:#174ea6;color:white;border:0}
-#msg{display:none;margin-top:12px;padding:12px;text-align:center;border-radius:7px;font-weight:bold}
-@media(max-width:800px){.page{margin:0;padding:18px 10px}.top{grid-template-columns:1fr}.summarygrid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:800px){.page{margin:0;padding:18px 10px}.top{grid-template-columns:1fr}.summarygrid{grid-template-columns:repeat(2,1fr)}}
-</style></head><body><div class="page">
-<div class="header"><b>SEPANGAER CHEMICAL INDUSTRY SDN BHD</b><div>(Company No.: 221548-M)</div><h1>MONTHLY FIRE HAZARD AND PREVENTION CHECKLIST</h1></div>
-<button type="button" class="settingsBtn" onclick="openSettings()">⚙ Equipment Settings</button>
-<form id="form"><div class="top"><div><b>SECTION :</b> LOGISTIC (SCI JETTY)</div><div><b>DATE OF INSPECTION :</b><input id="date" type="date" required></div></div>
-<div id="tables"></div>
+.top input{width:100%;border:0;border-bottom:1px solid #111;padding:5px}
+section{margin-top:20px}h2{font-size:15px;margin:0 0 7px}
+.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}
+th,td{border:1px solid #222;padding:5px;text-align:center;vertical-align:middle}
+th{background:#fafafa;font-weight:bold;line-height:1.15}.equip{font-weight:bold;width:90px}
+td input,td select{width:100%;padding:6px;border:1px solid #bbb;border-radius:3px;font-size:11px;background:#fff}
+.foot{font-size:12px;font-weight:bold;margin:17px 0 28px}
+.sign{display:grid;grid-template-columns:repeat(3,1fr);gap:35px;text-align:center;font-size:12px}
+.line{height:30px;border-bottom:1px solid #111;margin-bottom:5px}
+#inspectedBy{border:0;border-bottom:1px solid #111;width:80%;text-align:center}
+.actions{position:sticky;bottom:0;margin-top:20px;padding:12px;background:#eef1f4;text-align:center}
+button{padding:12px 24px;border-radius:7px;border:1px solid #999;font-weight:bold;cursor:pointer}
+.submit{background:#174ea6;color:#fff;border:0}@media(max-width:800px){.page{padding:18px 10px;margin:0}.top{grid-template-columns:1fr}table{min-width:950px}}
+</style></head>
+<body><div class="page">
+<div class="header"><b>SEPANGAER CHEMICAL INDUSTRY SDN BHD</b><div>(Company No.: 221548-M)</div>
+<h1>MONTHLY FIRE HAZARD AND PREVENTION CHECKLIST</h1></div>
+<form id="inspectionForm">
+<div class="top"><div><b>SECTION :</b> LOGISTIC (SCI JETTY)</div>
+<div><b>DATE OF INSPECTION :</b><input id="date" type="date" required></div></div>
+<section><h2>FIRE EXTINGUISHER</h2><div class="tablewrap"><table><thead><tr><th>Equipment Number</th><th>Type</th><th>Cylinder Capacity</th><th>Expired Date</th><th>Low Pressure (Y/N)</th><th>Damaged to Safety Pin (Y/N)</th><th>Damaged to Nozzle (Y/N)</th><th>Observed Corrosion (Y/N)</th><th>Remarks</th></tr></thead><tbody><tr><td class="equip">L 01</td><td><input name="s0_0_0" type="text"></td><td><input name="s0_0_1" type="text"></td><td><input name="s0_0_2" type="date"></td><td><select name="s0_0_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_0_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_0_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_0_6"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s0_0_7" type="text"></td></tr><tr><td class="equip">L 02</td><td><input name="s0_1_0" type="text"></td><td><input name="s0_1_1" type="text"></td><td><input name="s0_1_2" type="date"></td><td><select name="s0_1_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_1_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_1_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_1_6"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s0_1_7" type="text"></td></tr><tr><td class="equip">L 03</td><td><input name="s0_2_0" type="text"></td><td><input name="s0_2_1" type="text"></td><td><input name="s0_2_2" type="date"></td><td><select name="s0_2_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_2_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_2_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_2_6"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s0_2_7" type="text"></td></tr><tr><td class="equip">L 04</td><td><input name="s0_3_0" type="text"></td><td><input name="s0_3_1" type="text"></td><td><input name="s0_3_2" type="date"></td><td><select name="s0_3_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_3_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_3_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_3_6"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s0_3_7" type="text"></td></tr><tr><td class="equip">L 05</td><td><input name="s0_4_0" type="text"></td><td><input name="s0_4_1" type="text"></td><td><input name="s0_4_2" type="date"></td><td><select name="s0_4_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_4_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_4_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_4_6"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s0_4_7" type="text"></td></tr><tr><td class="equip">L 06</td><td><input name="s0_5_0" type="text"></td><td><input name="s0_5_1" type="text"></td><td><input name="s0_5_2" type="date"></td><td><select name="s0_5_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_5_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_5_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_5_6"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s0_5_7" type="text"></td></tr><tr><td class="equip">L 07</td><td><input name="s0_6_0" type="text"></td><td><input name="s0_6_1" type="text"></td><td><input name="s0_6_2" type="date"></td><td><select name="s0_6_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_6_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_6_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_6_6"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s0_6_7" type="text"></td></tr><tr><td class="equip">L 08</td><td><input name="s0_7_0" type="text"></td><td><input name="s0_7_1" type="text"></td><td><input name="s0_7_2" type="date"></td><td><select name="s0_7_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_7_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_7_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s0_7_6"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s0_7_7" type="text"></td></tr></tbody></table></div></section><section><h2>FIRE HYDRANT</h2><div class="tablewrap"><table><thead><tr><th>Equipment Number</th><th>Damage to Body (Y/N)</th><th>Damaged to Box Seal (Y/N)</th><th>Observed Leakage (Y/N)</th><th>Damaged to Control Knob (Y/N)</th><th>Damaged to Elevation Lock (Y/N)</th><th>Damaged to Rotation Lock (Y/N)</th><th>Remarks</th></tr></thead><tbody><tr><td class="equip">H 01</td><td><select name="s1_0_0"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_0_1"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_0_2"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_0_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_0_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_0_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s1_0_6" type="text"></td></tr><tr><td class="equip">H 02</td><td><select name="s1_1_0"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_1_1"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_1_2"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_1_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_1_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s1_1_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s1_1_6" type="text"></td></tr></tbody></table></div></section><section><h2>FIRE HOSE REEL</h2><div class="tablewrap"><table><thead><tr><th>Equipment Number</th><th>Damaged to Reel (Y/N)</th><th>Observed Leakage (Y/N)</th><th>Damaged to Hose (Y/N)</th><th>Damaged to Nozzle (Y/N)</th><th>Damaged to Box (Y/N)</th><th>Observed Corrossion (Y/N)</th><th>Remarks</th></tr></thead><tbody><tr><td class="equip">HR 01</td><td><select name="s2_0_0"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_0_1"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_0_2"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_0_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_0_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_0_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s2_0_6" type="text"></td></tr><tr><td class="equip">HR 02</td><td><select name="s2_1_0"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_1_1"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_1_2"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_1_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_1_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_1_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s2_1_6" type="text"></td></tr><tr><td class="equip">HR 03</td><td><select name="s2_2_0"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_2_1"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_2_2"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_2_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_2_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_2_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s2_2_6" type="text"></td></tr><tr><td class="equip">HR 04</td><td><select name="s2_3_0"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_3_1"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_3_2"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_3_3"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_3_4"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><select name="s2_3_5"><option value="">-</option><option>Y</option><option>N</option><option>N/A</option></select></td><td><input name="s2_3_6" type="text"></td></tr></tbody></table></div></section>
 <div class="foot">* Please indicate (Y) for YES, (N) for NO and N/A for NOT APPLICABLE</div>
-<div class="sign"><div><div class="line"></div>Checked By:<br>Safety &amp; Health</div><div><div class="line"></div>Reviewed By:<br>Section Head</div><div><div class="line"></div>Inspected By:<br><input id="inspectedBy" required></div></div>
-<div class="summary"><b>Overall Inspection</b><div style="margin-top:10px"><select id="overallStatus" required><option value="">Select status</option><option>Good</option><option>Need Attention</option><option>Not Safe</option></select><textarea id="overallRemarks" placeholder="Overall remarks / action required" style="width:100%;margin-top:8px;min-height:65px"></textarea></div>
-<div class="summarygrid" style="margin-top:10px"><div class="summarybox"><b id="total">0</b>Total</div><div class="summarybox"><b id="ok">0</b>OK</div><div class="summarybox"><b id="bad">0</b>Not OK</div><div class="summarybox"><b id="na">0</b>N/A</div></div></div>
-<div id="msg"></div><div class="actions"><button type="button" onclick="location.reload()">CLEAR</button> <button class="submit" id="submit">SUBMIT &amp; EMAIL PDF</button></div></form></div>
-
-<div id="settingsModal" class="modal">
-  <div class="modalbox">
-    <div class="modalhead">
-      <h3>Equipment Master Settings</h3>
-      <button type="button" class="close" onclick="closeSettings()">×</button>
-    </div>
-    <p style="font-size:12px;color:#555">
-      Enter the fixed information for each fire extinguisher here. The inspector will then only select
-      <b>Y / N / N/A</b> during inspection. Settings are saved in this browser.
-    </p>
-    <div style="overflow:auto">
-      <table class="settingTable">
-        <thead><tr><th>Equipment</th><th>Type</th><th>Cylinder Capacity</th><th>Expired Date</th></tr></thead>
-        <tbody id="settingRows"></tbody>
-      </table>
-    </div>
-    <div class="modalActions">
-      <button type="button" onclick="resetSettings()">Reset</button>
-      <button type="button" class="submit" onclick="saveSettings()">Save Settings</button>
-    </div>
-  </div>
+<div class="sign">
+<div><div class="line"></div>Checked By:<br>Safety &amp; Health</div>
+<div><div class="line"></div>Reviewed By:<br>Section Head</div>
+<div><div class="line"></div>Inspected By:<br><input id="inspectedBy" type="text" placeholder="Name" required></div>
 </div>
+<div style="text-align:center;font-size:11px;color:#666;margin-top:12px">Equipment details are loaded from Equipment Master.</div>
+<div class="actions"><button type="button" onclick="document.getElementById('inspectionForm').reset()">CLEAR</button>
+<button class="submit" type="submit">SUBMIT INSPECTION</button></div>
+</form></div>
 
 <script>
-const APPS_SCRIPT_URL="https://script.google.com/macros/s/AKfycby9oYkhuqzefJC0mmNHrBTwyceUlqDfgXdnVxRwJlkVFodvQRDvy6jtiWJI-5EHezIZ/exec";
-const sections=[["FIRE EXTINGUISHER", ["L 01", "L 02", "L 03", "L 04", "L 05", "L 06", "L 07", "L 08"], ["Type", "Cylinder Capacity", "Expired Date", "Low Pressure (Y/N)", "Damaged to Safety Pin (Y/N)", "Damaged to Nozzle (Y/N)", "Observed Corrosion (Y/N)", "Remarks"]], ["FIRE HYDRANT", ["H 01", "H 02"], ["Damage to Body (Y/N)", "Damaged to Box Seal (Y/N)", "Observed Leakage (Y/N)", "Damaged to Control Knob (Y/N)", "Damaged to Elevation Lock (Y/N)", "Damaged to Rotation Lock (Y/N)", "Remarks"]], ["FIRE HOSE REEL", ["HR 01", "HR 02", "HR 03", "HR 04"], ["Damaged to Reel (Y/N)", "Observed Leakage (Y/N)", "Damaged to Hose (Y/N)", "Damaged to Nozzle (Y/N)", "Damaged to Box (Y/N)", "Observed Corrossion (Y/N)", "Remarks"]]];
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9oYkhuqzefJC0mmNHrBTwyceUlqDfgXdnVxRwJlkVFodvQRDvy6jtiWJI-5EHezIZ/exec";
 
-const MASTER_URL=APPS_SCRIPT_URL+"?action=master&callback=masterLoaded";
-
-function masterLoaded(data){
-  if(!data || !data.ok) return;
-  window.master=data.master||{};
-  render();
-}
-window.master={};
-
-function safe(s){return String(s).replace(/[^A-Z0-9]+/g,"_").replace(/^_|_$/g,"")}
-
-function loadMasterFromSheet(){
-  const s=document.createElement("script");
-  s.src=MASTER_URL;
-  s.onerror=()=>{document.getElementById("msg").style.display="block";
-    document.getElementById("msg").style.background="#fff3cd";
-    document.getElementById("msg").style.color="#664d03";
-    document.getElementById("msg").textContent="Equipment master data could not be loaded. Please check the Apps Script Web App URL.";
-  };
-  document.body.appendChild(s);
-}
-
-function stats(){
-  let items=[...document.querySelectorAll("tbody tr")],a={total:items.length,ok:0,bad:0,na:0};
-  items.forEach(r=>{
-    let vals=[...r.querySelectorAll("select")].map(x=>x.value).filter(Boolean);
-    if(vals.includes("N"))a.bad++;
-    else if(vals.length&&vals.every(v=>v==="N/A"))a.na++;
-    else a.ok++;
+function jsonp(url){
+  return new Promise((resolve, reject) => {
+    const cb = "cb_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+    const script = document.createElement("script");
+    const timer = setTimeout(() => { cleanup(); reject(new Error("Equipment Master request timed out.")); }, 15000);
+    function cleanup(){ clearTimeout(timer); script.remove(); try{delete window[cb]}catch(e){} }
+    window[cb] = data => { cleanup(); resolve(data); };
+    script.onerror = () => { cleanup(); reject(new Error("Cannot connect to Google Apps Script.")); };
+    script.src = url + "?action=master&callback=" + encodeURIComponent(cb);
+    document.body.appendChild(script);
   });
-  ["total","ok","bad","na"].forEach(k=>document.getElementById(k).textContent=a[k]);
-  return a;
 }
 
-render();
-document.getElementById("date").valueAsDate=new Date();
-
-document.addEventListener("change",stats);
-
-document.getElementById("form").addEventListener("submit",async e=>{
-  e.preventDefault();
-  let msg=document.getElementById("msg"),btn=document.getElementById("submit");
-  if(APPS_SCRIPT_URL.includes("PASTE_YOUR")){
-    msg.style.display="block";msg.style.background="#fdecea";msg.style.color="#b3261e";
-    msg.textContent="Please set the Google Apps Script Web App URL first.";return;
+function findValue(obj, names){
+  const keys = Object.keys(obj || {});
+  for(const n of names){
+    const k = keys.find(x => x.toLowerCase().replace(/[^a-z0-9]/g,"") === n.toLowerCase().replace(/[^a-z0-9]/g,""));
+    if(k) return obj[k];
   }
-  btn.disabled=true;btn.textContent="SUBMITTING...";
+  return "";
+}
 
-  let items=[];
-  document.querySelectorAll("tbody tr").forEach(r=>{
-    let values=[...r.querySelectorAll("[data-ph]")].map(x=>({placeholder:x.dataset.ph,value:x.value}));
-    items.push({values,checks:[...r.querySelectorAll("select")].map(x=>x.value)});
+function normaliseMaster(data){
+  const rows = Array.isArray(data) ? data : (data.rows || data.data || []);
+  return rows.map(r => ({
+    number: findValue(r, ["Equipment Number","EquipmentNumber","Number","Equipment"]),
+    type: findValue(r, ["Type"]),
+    capacity: findValue(r, ["Cylinder Capacity","CylinderCapacity","Capacity"]),
+    expiry: findValue(r, ["Expiry Date","ExpiryDate","Expired Date","ExpiredDate"])
+  })).filter(r => r.number);
+}
+
+function fillMaster(rows){
+  const byNumber = {};
+  rows.forEach(r => byNumber[String(r.number).trim().toUpperCase()] = r);
+
+  const table = document.querySelectorAll("table")[0];
+  table.querySelectorAll("tbody tr").forEach(tr => {
+    const number = tr.querySelector(".equip")?.textContent.trim();
+    const r = byNumber[String(number).toUpperCase()];
+    if(!r) return;
+
+    const inputs = tr.querySelectorAll("input");
+    if(inputs[0]) { inputs[0].value = r.type || ""; inputs[0].readOnly = true; }
+    if(inputs[1]) { inputs[1].value = r.capacity || ""; inputs[1].readOnly = true; }
+    if(inputs[2]) {
+      let d = String(r.expiry || "");
+      const m = d.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+      if(m) d = `${m[3]}-${String(m[2]).padStart(2,"0")}-${String(m[1]).padStart(2,"0")}`;
+      inputs[2].value = d;
+      inputs[2].readOnly = true;
+    }
   });
+}
 
-  let d={
-    inspectionDate:date.value,
-    inspectedBy:inspectedBy.value.trim(),
-    overallStatus:overallStatus.value,
-    overallRemarks:overallRemarks.value.trim(),
-    items
-  };
+function collectRows(){
+  const tables = document.querySelectorAll("table");
+  const defs = [
+    ["FIRE EXTINGUISHER", tables[0]],
+    ["FIRE HYDRANT", tables[1]],
+    ["FIRE HOSE REEL", tables[2]]
+  ];
+  return defs.map(([type,table]) => ({
+    type,
+    rows:[...table.querySelectorAll("tbody tr")].map(tr => ({
+      equipmentNumber: tr.querySelector(".equip")?.textContent.trim() || "",
+      values:[...tr.querySelectorAll("input,select")].map(x => x.value || "")
+    }))
+  }));
+}
+
+async function submitToAppsScript(payload){
+  const response = await fetch(APPS_SCRIPT_URL, {
+    method:"POST",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify(payload)
+  });
+  const text = await response.text();
+  try { return JSON.parse(text); }
+  catch(e) { return {ok:false, message:text || "Unexpected Apps Script response."}; }
+}
+
+async function loadMaster(){
+  try{
+    const data = await jsonp(APPS_SCRIPT_URL);
+    const rows = normaliseMaster(data);
+    if(rows.length) fillMaster(rows);
+  }catch(e){
+    console.warn("Equipment Master not loaded:", e);
+  }
+}
+
+document.getElementById("date").valueAsDate = new Date();
+loadMaster();
+
+document.getElementById("inspectionForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const inspectionDate = document.getElementById("date").value;
+  const inspectedBy = document.getElementById("inspectedBy").value.trim();
+
+  if(!inspectionDate || !inspectedBy){
+    alert("Please complete Date of Inspection and Inspected By.");
+    return;
+  }
+
+  const button = document.querySelector(".submit");
+  const oldText = button.textContent;
+  button.disabled = true;
+  button.textContent = "SUBMITTING...";
 
   try{
-    let res=await fetch(APPS_SCRIPT_URL,{
-      method:"POST",
-      headers:{"Content-Type":"text/plain;charset=utf-8"},
-      body:JSON.stringify(d)
+    const result = await submitToAppsScript({
+      inspectionDate,
+      inspectedBy,
+      sections: collectRows(),
+      source: "SCI Jetty Fire Inspection Web Form"
     });
-    let j=await res.json();
-    if(!j.ok)throw Error(j.error||"Submission failed");
-    msg.style.display="block";msg.style.background="#e8f5e9";msg.style.color="#1b5e20";
-    msg.innerHTML=`Submitted successfully. PDF has been emailed. <a href="${j.pdfUrl}" target="_blank">Open PDF</a>`;
-    btn.textContent="SUBMITTED";
-  }catch(err){
-    msg.style.display="block";msg.style.background="#fdecea";msg.style.color="#b3261e";
-    msg.textContent=err.message;
-    btn.disabled=false;btn.textContent="SUBMIT & EMAIL PDF";
+
+    if(result && (result.ok === true || result.success === true)){
+      alert("Inspection submitted successfully.\nPDF has been generated and emailed.");
+      document.getElementById("inspectionForm").reset();
+      document.getElementById("date").valueAsDate = new Date();
+      loadMaster();
+    }else{
+      throw new Error(result?.message || "Submission failed.");
+    }
+  }catch(e){
+    alert("Submission failed:\n" + e.message);
+  }finally{
+    button.disabled = false;
+    button.textContent = oldText;
   }
 });
-</script></body></html>
+</script>
+
+</body></html>
