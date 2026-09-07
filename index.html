@@ -65,7 +65,7 @@ function findValue(obj, names){
 }
 
 function normaliseMaster(data){
-  const rows = Array.isArray(data) ? data : (data.rows || data.data || []);
+  const rows = Array.isArray(data) ? data : (data.items || data.rows || data.data || []);
   return rows.map(r => ({
     number: findValue(r, ["Equipment Number","EquipmentNumber","Number","Equipment"]),
     type: findValue(r, ["Type"]),
@@ -127,7 +127,7 @@ async function submitToAppsScript(payload){
 
 async function loadMaster(){
   try{
-    const data = await jsonp(APPS_SCRIPT_URL + "?action=master");
+    const data = await jsonp(APPS_SCRIPT_URL);
     const rows = normaliseMaster(data);
     if(rows.length) fillMaster(rows);
   }catch(e){
