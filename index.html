@@ -127,7 +127,7 @@ async function submitToAppsScript(payload){
 
 async function loadMaster(){
   try{
-    const data = await jsonp(APPS_SCRIPT_URL + "?action=master");
+    const data = await jsonp(APPS_SCRIPT_URL);
     const rows = normaliseMaster(data);
     if(rows.length) fillMaster(rows);
   }catch(e){
