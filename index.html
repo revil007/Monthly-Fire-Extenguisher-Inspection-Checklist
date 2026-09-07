@@ -76,12 +76,13 @@ function normaliseMaster(data){
 
 function fillMaster(rows){
   const byNumber = {};
-  rows.forEach(r => byNumber[String(r.number).trim().toUpperCase()] = r);
+  const norm = s => String(s || "").replace(/[^A-Za-z0-9]/g,"").toUpperCase();
+  rows.forEach(r => byNumber[norm(r.number)] = r);
 
   const table = document.querySelectorAll("table")[0];
   table.querySelectorAll("tbody tr").forEach(tr => {
     const number = tr.querySelector(".equip")?.textContent.trim();
-    const r = byNumber[String(number).toUpperCase()];
+    const r = byNumber[norm(number)];
     if(!r) return;
 
     const inputs = tr.querySelectorAll("input");
@@ -126,7 +127,7 @@ async function submitToAppsScript(payload){
 
 async function loadMaster(){
   try{
-    const data = await jsonp(APPS_SCRIPT_URL);
+    const data = await jsonp(APPS_SCRIPT_URL + "?action=master");
     const rows = normaliseMaster(data);
     if(rows.length) fillMaster(rows);
   }catch(e){
