@@ -1,0 +1,141 @@
+
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SCI Jetty Fire Inspection</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef1f4;font-family:Arial;color:#111}
+.page{max-width:1250px;margin:18px auto;background:#fff;padding:25px 30px 35px}
+.header{text-align:center;border-bottom:2px solid #111;padding-bottom:12px}.header b{font-size:14px}.header h1{font-size:19px;margin:7px 0}
+.top{display:grid;grid-template-columns:1fr 300px;gap:25px;margin:18px 0;font-size:14px}
+.top input{width:100%;border:0;border-bottom:1px solid #111;padding:6px}
+section{margin-top:20px}h2{font-size:15px;margin:0 0 7px}.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px;min-width:950px}
+th,td{border:1px solid #222;padding:5px;text-align:center;vertical-align:middle}th{font-weight:bold;line-height:1.15;background:#fafafa}
+td.equip{font-weight:bold}td input,td select{width:100%;padding:6px;border:1px solid #bbb;border-radius:3px;font-size:11px;background:#fff}
+.foot{font-size:12px;font-weight:bold;margin:17px 0 28px}.sign{display:grid;grid-template-columns:repeat(3,1fr);gap:35px;text-align:center;font-size:12px}
+.line{height:30px;border-bottom:1px solid #111}#inspectedBy{border:0;border-bottom:1px solid #111;width:80%;text-align:center}
+.summary{margin-top:20px;padding:15px;border:1px solid #bbb;border-radius:8px}.summarygrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.summarybox{border:1px solid #ddd;padding:10px;text-align:center}.summarybox b{display:block;font-size:18px}
+.actions{position:sticky;bottom:0;background:rgba(238,241,244,.97);padding:12px;text-align:center;margin-top:20px}
+button{padding:12px 24px;border-radius:7px;border:1px solid #999;font-weight:bold;cursor:pointer}.submit{background:#174ea6;color:white;border:0}
+#msg{display:none;margin-top:12px;padding:12px;text-align:center;border-radius:7px;font-weight:bold}
+@media(max-width:800px){.page{margin:0;padding:18px 10px}.top{grid-template-columns:1fr}.summarygrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:800px){.page{margin:0;padding:18px 10px}.top{grid-template-columns:1fr}.summarygrid{grid-template-columns:repeat(2,1fr)}}
+</style></head><body><div class="page">
+<div class="header"><b>SEPANGAER CHEMICAL INDUSTRY SDN BHD</b><div>(Company No.: 221548-M)</div><h1>MONTHLY FIRE HAZARD AND PREVENTION CHECKLIST</h1></div>
+<button type="button" class="settingsBtn" onclick="openSettings()">⚙ Equipment Settings</button>
+<form id="form"><div class="top"><div><b>SECTION :</b> LOGISTIC (SCI JETTY)</div><div><b>DATE OF INSPECTION :</b><input id="date" type="date" required></div></div>
+<div id="tables"></div>
+<div class="foot">* Please indicate (Y) for YES, (N) for NO and N/A for NOT APPLICABLE</div>
+<div class="sign"><div><div class="line"></div>Checked By:<br>Safety &amp; Health</div><div><div class="line"></div>Reviewed By:<br>Section Head</div><div><div class="line"></div>Inspected By:<br><input id="inspectedBy" required></div></div>
+<div class="summary"><b>Overall Inspection</b><div style="margin-top:10px"><select id="overallStatus" required><option value="">Select status</option><option>Good</option><option>Need Attention</option><option>Not Safe</option></select><textarea id="overallRemarks" placeholder="Overall remarks / action required" style="width:100%;margin-top:8px;min-height:65px"></textarea></div>
+<div class="summarygrid" style="margin-top:10px"><div class="summarybox"><b id="total">0</b>Total</div><div class="summarybox"><b id="ok">0</b>OK</div><div class="summarybox"><b id="bad">0</b>Not OK</div><div class="summarybox"><b id="na">0</b>N/A</div></div></div>
+<div id="msg"></div><div class="actions"><button type="button" onclick="location.reload()">CLEAR</button> <button class="submit" id="submit">SUBMIT &amp; EMAIL PDF</button></div></form></div>
+
+<div id="settingsModal" class="modal">
+  <div class="modalbox">
+    <div class="modalhead">
+      <h3>Equipment Master Settings</h3>
+      <button type="button" class="close" onclick="closeSettings()">×</button>
+    </div>
+    <p style="font-size:12px;color:#555">
+      Enter the fixed information for each fire extinguisher here. The inspector will then only select
+      <b>Y / N / N/A</b> during inspection. Settings are saved in this browser.
+    </p>
+    <div style="overflow:auto">
+      <table class="settingTable">
+        <thead><tr><th>Equipment</th><th>Type</th><th>Cylinder Capacity</th><th>Expired Date</th></tr></thead>
+        <tbody id="settingRows"></tbody>
+      </table>
+    </div>
+    <div class="modalActions">
+      <button type="button" onclick="resetSettings()">Reset</button>
+      <button type="button" class="submit" onclick="saveSettings()">Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const APPS_SCRIPT_URL="https://script.google.com/macros/s/AKfycby9oYkhuqzefJC0mmNHrBTwyceUlqDfgXdnVxRwJlkVFodvQRDvy6jtiWJI-5EHezIZ/exec";
+const sections=[["FIRE EXTINGUISHER", ["L 01", "L 02", "L 03", "L 04", "L 05", "L 06", "L 07", "L 08"], ["Type", "Cylinder Capacity", "Expired Date", "Low Pressure (Y/N)", "Damaged to Safety Pin (Y/N)", "Damaged to Nozzle (Y/N)", "Observed Corrosion (Y/N)", "Remarks"]], ["FIRE HYDRANT", ["H 01", "H 02"], ["Damage to Body (Y/N)", "Damaged to Box Seal (Y/N)", "Observed Leakage (Y/N)", "Damaged to Control Knob (Y/N)", "Damaged to Elevation Lock (Y/N)", "Damaged to Rotation Lock (Y/N)", "Remarks"]], ["FIRE HOSE REEL", ["HR 01", "HR 02", "HR 03", "HR 04"], ["Damaged to Reel (Y/N)", "Observed Leakage (Y/N)", "Damaged to Hose (Y/N)", "Damaged to Nozzle (Y/N)", "Damaged to Box (Y/N)", "Observed Corrossion (Y/N)", "Remarks"]]];
+
+const MASTER_URL=APPS_SCRIPT_URL+"?action=master&callback=masterLoaded";
+
+function masterLoaded(data){
+  if(!data || !data.ok) return;
+  window.master=data.master||{};
+  render();
+}
+window.master={};
+
+function safe(s){return String(s).replace(/[^A-Z0-9]+/g,"_").replace(/^_|_$/g,"")}
+
+function loadMasterFromSheet(){
+  const s=document.createElement("script");
+  s.src=MASTER_URL;
+  s.onerror=()=>{document.getElementById("msg").style.display="block";
+    document.getElementById("msg").style.background="#fff3cd";
+    document.getElementById("msg").style.color="#664d03";
+    document.getElementById("msg").textContent="Equipment master data could not be loaded. Please check the Apps Script Web App URL.";
+  };
+  document.body.appendChild(s);
+}
+
+function stats(){
+  let items=[...document.querySelectorAll("tbody tr")],a={total:items.length,ok:0,bad:0,na:0};
+  items.forEach(r=>{
+    let vals=[...r.querySelectorAll("select")].map(x=>x.value).filter(Boolean);
+    if(vals.includes("N"))a.bad++;
+    else if(vals.length&&vals.every(v=>v==="N/A"))a.na++;
+    else a.ok++;
+  });
+  ["total","ok","bad","na"].forEach(k=>document.getElementById(k).textContent=a[k]);
+  return a;
+}
+
+render();
+document.getElementById("date").valueAsDate=new Date();
+
+document.addEventListener("change",stats);
+
+document.getElementById("form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  let msg=document.getElementById("msg"),btn=document.getElementById("submit");
+  if(APPS_SCRIPT_URL.includes("PASTE_YOUR")){
+    msg.style.display="block";msg.style.background="#fdecea";msg.style.color="#b3261e";
+    msg.textContent="Please set the Google Apps Script Web App URL first.";return;
+  }
+  btn.disabled=true;btn.textContent="SUBMITTING...";
+
+  let items=[];
+  document.querySelectorAll("tbody tr").forEach(r=>{
+    let values=[...r.querySelectorAll("[data-ph]")].map(x=>({placeholder:x.dataset.ph,value:x.value}));
+    items.push({values,checks:[...r.querySelectorAll("select")].map(x=>x.value)});
+  });
+
+  let d={
+    inspectionDate:date.value,
+    inspectedBy:inspectedBy.value.trim(),
+    overallStatus:overallStatus.value,
+    overallRemarks:overallRemarks.value.trim(),
+    items
+  };
+
+  try{
+    let res=await fetch(APPS_SCRIPT_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(d)
+    });
+    let j=await res.json();
+    if(!j.ok)throw Error(j.error||"Submission failed");
+    msg.style.display="block";msg.style.background="#e8f5e9";msg.style.color="#1b5e20";
+    msg.innerHTML=`Submitted successfully. PDF has been emailed. <a href="${j.pdfUrl}" target="_blank">Open PDF</a>`;
+    btn.textContent="SUBMITTED";
+  }catch(err){
+    msg.style.display="block";msg.style.background="#fdecea";msg.style.color="#b3261e";
+    msg.textContent=err.message;
+    btn.disabled=false;btn.textContent="SUBMIT & EMAIL PDF";
+  }
+});
+</script></body></html>
